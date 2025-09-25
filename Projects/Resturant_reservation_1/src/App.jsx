@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
-import RestaurantReservation from './ResturantReservation';
+import RestaurantReservation from './RestaurantReservation';
 import Groups from './Group.jsx'
 
 
