@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Routes, Link, Route } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Button as MuiButton, Typography, Container, Box, IconButton } from '@mui/material';
+// ... altre importazioni
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import Home from './Home.jsx';
 import Login from './Login.jsx';
 import RestaurantReservation from './RestaurantReservation';
 import Groups from './Group.jsx'
+import EditReservation from './EditReservation.jsx'; // <--- NUOVA IMPORTAZIONE
 
 
 // Componente NavBar (visibile solo a utente loggato)
 const NavBar = ({ handleLogout, user }) => (
+// ... (Il codice di NavBar rimane invariato)
   <AppBar position="static" color="primary" elevation={2}>
     <Toolbar sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
       <Box sx={{ display: 'flex', flexGrow: 1, gap: 2, flexWrap: 'wrap' }}>
@@ -49,6 +52,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [reservations, setReservations] = useState([]);
 
+  // ... (handleLogin e handleLogout rimangono invariati)
   const handleLogin = (username) => {
     setUser(username);
   };
@@ -57,7 +61,7 @@ export default function App() {
     setUser(null);
   };
 
-  // Funzione unificata per aggiungere prenotazioni, gestisce anche i dettagli di gruppo
+  
   const handleAddReservation = (formData, details = "Tavolo Assegnato automaticamente") => { 
     const isGroup = Number(formData.guests) >= 25;
     
@@ -74,6 +78,13 @@ export default function App() {
   
   const handleDelete = (id) => {
     setReservations((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  // NUOVA FUNZIONE PER MODIFICARE LA PRENOTAZIONE
+  const handleEditReservation = (updatedReservation) => {
+    setReservations((prev) => 
+      prev.map(r => r.id === updatedReservation.id ? updatedReservation : r)
+    );
   };
   
   return (
@@ -97,6 +108,11 @@ export default function App() {
                 <Route path="/" element={<Home reservations={reservations} onDelete={handleDelete} />} />
                 <Route path="/tavoli" element={<RestaurantReservation onAddReservation={handleAddReservation} />} />
                 <Route path="/Groups" element={<Groups onAddReservation={handleAddReservation} />} /> 
+                {/* NUOVA ROUTE PER LA MODIFICA */}
+                <Route 
+                    path="/edit/:id" 
+                    element={<EditReservation reservations={reservations} onEditReservation={handleEditReservation} />} 
+                />
               </Routes>
             </Box>
             
